@@ -270,6 +270,34 @@ footer {
     border-left: 4px solid #3498db;
 }
 
+/* Language Switcher */
+.language-switcher {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 2rem;
+    background-color: #34495e;
+}
+
+.lang-btn {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.lang-btn.active {
+    background-color: white;
+    color: #2c3e50;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     nav ul {
@@ -321,5 +349,10 @@ footer {
 
     .referee-call {
         padding: 0.8rem;
+    }
+
+    .language-switcher {
+        justify-content: center;
+        padding: 0.5rem;
     }
 } 
