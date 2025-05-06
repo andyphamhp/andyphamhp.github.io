@@ -43,8 +43,55 @@ header {
     top: 0;
     z-index: 100;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 2rem;
+    position: relative;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 200;
+}
+
+.nav-toggle .bar {
+    width: 26px;
+    height: 3px;
+    background: white;
+    margin: 4px 0;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+.nav-toggle.open .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle.open .bar:nth-child(2) {
+    opacity: 0;
+}
+.nav-toggle.open .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+#mainNav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    transition: max-height 0.3s ease;
+}
+
+nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
 nav ul {
@@ -65,11 +112,25 @@ nav a:hover {
     color: var(--accent-color);
 }
 
-/* Theme Switcher */
-.theme-switcher {
-    padding: 0.5rem 2rem;
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
 }
 
+.language-switcher {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 0;
+    background-color: transparent;
+}
+
+.theme-switcher {
+    padding: 0.5rem 0;
+}
+
+/* Theme Switcher */
 .theme-btn {
     background: none;
     border: 1px solid white;
@@ -328,13 +389,6 @@ footer {
 }
 
 /* Language Switcher */
-.language-switcher {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0.5rem 2rem;
-    background-color: var(--header-bg);
-}
-
 .lang-btn {
     background: none;
     border: 1px solid white;
@@ -360,67 +414,93 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    nav {
+        width: 100%;
+    }
+    .header-controls {
+        margin-left: 0;
+        justify-content: center;
+        width: 100%;
+    }
+    .language-switcher, .theme-switcher {
+        padding: 0.5rem;
+    }
     nav ul {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
     }
-
     #hero h1 {
         font-size: 2rem;
     }
-
     .weapon-grid,
     .equipment-grid {
         grid-template-columns: 1fr;
     }
-
     .article-content {
         padding: 0 1rem;
     }
-
     .rule-card {
         padding: 1rem;
     }
-
     .article-content h3 {
         font-size: 1.5rem;
     }
-
     .rule-card h4 {
         font-size: 1.2rem;
     }
-
     #referee h3 {
         font-size: 1.4rem;
     }
-
     .rule-card.summary h4 {
         font-size: 1.2rem;
     }
-
     .scenario-card {
         padding: 1rem;
     }
-
     .scenario-card h4 {
         font-size: 1.2rem;
     }
-
     .referee-call {
         padding: 0.8rem;
     }
+}
 
-    .language-switcher {
-        justify-content: center;
-        padding: 0.5rem;
+@media (max-width: 900px) {
+    .nav-toggle {
+        display: flex;
     }
-
-    header {
+    #mainNav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100vw;
+        background: var(--header-bg);
         flex-direction: column;
+        align-items: center;
+        max-height: 0;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        z-index: 150;
     }
-
-    .theme-switcher {
-        padding: 0.5rem;
+    #mainNav.open {
+        max-height: 400px;
+        padding-bottom: 1rem;
+    }
+    #mainNav ul {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        align-items: center;
+        padding: 1rem 0 0 0;
+    }
+    .header-controls {
+        margin-left: 0;
+        justify-content: center;
+        width: 100%;
     }
 } 

@@ -11,7 +11,12 @@
 </head>
 <body>
     <header>
-        <nav>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="toggleNav()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <nav id="mainNav">
             <ul>
                 <li><a href="#overview" data-en="Overview" data-vi="Tổng Quan">Overview</a></li>
                 <li><a href="#weapons" data-en="Weapons" data-vi="Vũ Khí">Weapons</a></li>
@@ -317,6 +322,13 @@
         function updateThemeButton(theme) {
             const themeBtn = document.getElementById('themeBtn');
             themeBtn.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
+        }
+
+        // Hamburger menu toggle
+        function toggleNav() {
+            const nav = document.getElementById('mainNav');
+            nav.classList.toggle('open');
+            document.getElementById('navToggle').classList.toggle('open');
         }
     </script>
 </body>
