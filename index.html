@@ -11,23 +11,24 @@
 </head>
 <body>
     <header>
-        <div class="language-switcher">
-            <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en">🇬🇧 EN</button>
-            <button onclick="switchLanguage('vi')" class="lang-btn" data-lang="vi">🇻🇳 VI</button>
-        </div>
-        <div class="theme-switcher">
-            <button onclick="switchTheme()" class="theme-btn" id="themeBtn">🌙</button>
-        </div>
         <nav>
             <ul>
                 <li><a href="#overview" data-en="Overview" data-vi="Tổng Quan">Overview</a></li>
                 <li><a href="#weapons" data-en="Weapons" data-vi="Vũ Khí">Weapons</a></li>
                 <li><a href="#rules" data-en="Rules" data-vi="Luật">Rules</a></li>
-                <li><a href="#equipment" data-en="Equipment" data-vi="Trang Bị">Equipment</a></li>
                 <li><a href="#right-of-way" data-en="Right of Way" data-vi="Quyền Ưu Tiên">Right of Way</a></li>
                 <li><a href="#referee" data-en="Referee Decisions" data-vi="Quyết Định Trọng Tài">Referee Decisions</a></li>
             </ul>
         </nav>
+        <div class="header-controls">
+            <div class="language-switcher">
+                <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en">🇬🇧 EN</button>
+                <button onclick="switchLanguage('vi')" class="lang-btn" data-lang="vi">🇻🇳 VI</button>
+            </div>
+            <div class="theme-switcher">
+                <button onclick="switchTheme()" class="theme-btn" id="themeBtn">🌙</button>
+            </div>
+        </div>
     </header>
 
     <main>
@@ -65,29 +66,6 @@
                 <li>In foil and sabre, there is a rule of "right of way" that determines who gets the point</li>
                 <li>Épée has no right of way rule - the first fencer to score a hit gets the point</li>
             </ul>
-        </section>
-
-        <section id="equipment">
-            <h2 data-en="Essential Equipment" data-vi="Trang Bị Cơ Bản">Essential Equipment</h2>
-            <div class="equipment-grid">
-                <div class="equipment-card">
-                    <h3 data-en="Protective Gear" data-vi="Trang Bị Bảo Hộ">Protective Gear</h3>
-                    <ul>
-                        <li>Mask</li>
-                        <li>Jacket</li>
-                        <li>Glove</li>
-                        <li>Plastron</li>
-                    </ul>
-                </div>
-                <div class="equipment-card">
-                    <h3 data-en="Weapon Specific" data-vi="Vũ Khí Đặc Trưng">Weapon Specific</h3>
-                    <ul>
-                        <li>Foil/Épée/Sabre</li>
-                        <li>Body cord</li>
-                        <li>Lame (for foil/sabre)</li>
-                    </ul>
-                </div>
-            </div>
         </section>
 
         <section id="right-of-way">
