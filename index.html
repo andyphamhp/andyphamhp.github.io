@@ -15,6 +15,9 @@
             <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en">🇬🇧 EN</button>
             <button onclick="switchLanguage('vi')" class="lang-btn" data-lang="vi">🇻🇳 VI</button>
         </div>
+        <div class="theme-switcher">
+            <button onclick="switchTheme()" class="theme-btn" id="themeBtn">🌙</button>
+        </div>
         <nav>
             <ul>
                 <li><a href="#overview" data-en="Overview" data-vi="Tổng Quan">Overview</a></li>
@@ -316,7 +319,27 @@
         // Set English as default language when page loads
         document.addEventListener('DOMContentLoaded', function() {
             switchLanguage('en');
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.add(savedTheme);
+                updateThemeButton(savedTheme);
+            }
         });
+
+        function switchTheme() {
+            const body = document.body;
+            const isDark = body.classList.toggle('dark-theme');
+            const theme = isDark ? 'dark-theme' : 'light-theme';
+            localStorage.setItem('theme', theme);
+            updateThemeButton(theme);
+        }
+
+        function updateThemeButton(theme) {
+            const themeBtn = document.getElementById('themeBtn');
+            themeBtn.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
+        }
     </script>
 </body>
 </html> 
