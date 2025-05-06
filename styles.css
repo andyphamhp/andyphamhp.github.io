@@ -185,6 +185,33 @@ footer {
     margin-bottom: 0;
 }
 
+/* Referee Section */
+#referee {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+#referee h3 {
+    color: #2c3e50;
+    font-size: 1.6rem;
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.rule-card.summary {
+    background-color: #e8f4f8;
+    border-left: 4px solid #3498db;
+}
+
+.rule-card.summary h4 {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     nav ul {
@@ -215,6 +242,14 @@ footer {
     }
 
     .rule-card h4 {
+        font-size: 1.2rem;
+    }
+
+    #referee h3 {
+        font-size: 1.4rem;
+    }
+
+    .rule-card.summary h4 {
         font-size: 1.2rem;
     }
 } 
