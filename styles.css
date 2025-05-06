@@ -148,13 +148,13 @@ footer {
 
 .article-content {
     max-width: 900px;
-    margin: 0 auto;
+    margin: 0.2rem auto 0.2rem auto;
 }
 
 .article-content h3 {
     color: var(--text-color);
     font-size: 1.2rem;
-    margin: 1.2rem 0 1rem;
+    margin: 0.4rem 0 0.3rem;
     text-align: center;
 }
 
@@ -163,7 +163,7 @@ footer {
     padding: 0.8rem;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.3rem;
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
@@ -302,9 +302,14 @@ footer {
         border-radius: 3px;
         margin-bottom: 0.4rem;
     }
+    .article-content {
+        margin: 0.1rem auto 0.1rem auto;
+    }
     .article-content h3 {
-        font-size: 1rem;
-        margin: 0.8rem 0 0.6rem;
+        margin: 0.2rem 0 0.15rem;
+    }
+    .rule-card {
+        margin-bottom: 0.15rem;
     }
     .rule-card h4, .rule-card.summary h4 {
         font-size: 0.95rem;
