@@ -11,20 +11,6 @@
 </head>
 <body>
     <header>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="toggleNav()">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-        <nav id="mainNav">
-            <ul>
-                <li><a href="#overview" data-en="Overview" data-vi="Tổng Quan">Overview</a></li>
-                <li><a href="#weapons" data-en="Weapons" data-vi="Vũ Khí">Weapons</a></li>
-                <li><a href="#rules" data-en="Rules" data-vi="Luật">Rules</a></li>
-                <li><a href="#right-of-way" data-en="Right of Way" data-vi="Quyền Ưu Tiên">Right of Way</a></li>
-                <li><a href="#referee" data-en="Referee Decisions" data-vi="Quyết Định Trọng Tài">Referee Decisions</a></li>
-            </ul>
-        </nav>
         <div class="header-controls">
             <div class="language-switcher">
                 <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en">🇬🇧 EN</button>
@@ -322,13 +308,6 @@
         function updateThemeButton(theme) {
             const themeBtn = document.getElementById('themeBtn');
             themeBtn.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
-        }
-
-        // Hamburger menu toggle
-        function toggleNav() {
-            const nav = document.getElementById('mainNav');
-            nav.classList.toggle('open');
-            document.getElementById('navToggle').classList.toggle('open');
         }
     </script>
 </body>
