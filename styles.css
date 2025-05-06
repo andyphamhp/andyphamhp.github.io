@@ -43,19 +43,19 @@ body {
                 url('https://images.unsplash.com/photo-1589996448606-19d2d1a1a1b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
-    height: 50vh;
+    height: 35vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: white;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 #hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.7rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Main Content */
@@ -66,27 +66,27 @@ main {
 }
 
 section {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 }
 
 h2 {
     color: var(--text-color);
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
 }
 
 /* Weapon Grid */
 .weapon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
 .weapon-card {
     background: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
+    padding: 0.8rem;
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
@@ -100,13 +100,13 @@ h2 {
 .equipment-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .equipment-card {
     background: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
+    padding: 0.8rem;
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
@@ -151,15 +151,15 @@ footer {
 
 .article-content h3 {
     color: var(--text-color);
-    font-size: 1.8rem;
-    margin: 2rem 0 1.5rem;
+    font-size: 1.2rem;
+    margin: 1.2rem 0 1rem;
     text-align: center;
 }
 
 .rule-card {
     background: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
+    padding: 0.8rem;
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 1.5rem;
     transition: transform 0.3s ease, background-color 0.3s ease;
@@ -173,10 +173,10 @@ footer {
 
 .rule-card h4 {
     color: var(--text-color);
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.3rem;
     border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 0.5rem;
 }
 
 .rule-card p {
@@ -212,8 +212,8 @@ footer {
 
 .rule-card.summary h4 {
     color: var(--text-color);
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Scenarios Section */
@@ -278,5 +278,33 @@ footer {
 @media (max-width: 900px) {
     main {
         padding: 0.5rem;
+    }
+    section {
+        margin-bottom: 1.2rem;
+    }
+    #hero {
+        height: 25vh;
+        padding: 0.5rem;
+    }
+    #hero h1 {
+        font-size: 1.2rem;
+    }
+    h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.7rem;
+    }
+    .weapon-card,
+    .equipment-card,
+    .rule-card {
+        padding: 0.5rem;
+        border-radius: 3px;
+    }
+    .article-content h3 {
+        font-size: 1rem;
+        margin: 0.8rem 0 0.6rem;
+    }
+    .rule-card h4, .rule-card.summary h4 {
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
     }
 } 
