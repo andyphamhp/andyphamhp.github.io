@@ -12,6 +12,7 @@
         <header class="header">
             <h1 class="name">HOAI-ANH PHAM</h1>
             <p class="title">MOBILE ENGINEER</p>
+            <button id="exportPdf" class="export-btn">📄 Download PDF</button>
             <div class="contact">
                 <a href="mailto:andyphamhp9x@gmail.com" class="contact-item">andyphamhp9x@gmail.com</a>
                 <span class="separator">|</span>
@@ -208,5 +209,13 @@
         </section>
 
     </div>
+
+    <script>
+        document.getElementById('exportPdf').addEventListener('click', function() {
+            // Use the browser's built-in print functionality
+            // Users can select "Save as PDF" in the print dialog
+            window.print();
+        });
+    </script>
 </body>
 </html>

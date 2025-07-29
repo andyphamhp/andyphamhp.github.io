@@ -33,6 +33,7 @@ body {
     padding-bottom: 30px;
     border-bottom: 2px solid var(--border-color);
     margin-bottom: 30px;
+    position: relative;
 }
 
 .name {
@@ -64,6 +65,28 @@ body {
 .separator {
     margin: 0 10px;
     color: #ccc;
+}
+
+.export-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.export-btn:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .section {
@@ -254,6 +277,12 @@ body {
         margin: 5px 0;
     }
     
+    .export-btn {
+        position: static;
+        margin: 15px auto 20px;
+        display: block;
+    }
+    
     .job-header,
     .education-header {
         flex-direction: column;
@@ -283,6 +312,10 @@ body {
     
     .section {
         break-inside: avoid;
+    }
+    
+    .export-btn {
+        display: none;
     }
     
     a {
