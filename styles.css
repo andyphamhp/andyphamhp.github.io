@@ -144,6 +144,12 @@ body {
     margin-bottom: 10px;
 }
 
+.job-project {
+    margin: -5px 0 10px 0;
+    color: #555;
+    font-size: 0.95em;
+}
+
 .job-details {
     margin-left: 20px;
 }
