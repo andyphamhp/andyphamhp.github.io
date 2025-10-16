@@ -199,7 +199,6 @@ body {
 }
 
 .skill-category {
-    background-color: var(--light-gray);
     padding: 15px;
     border-radius: 5px;
 }
@@ -218,7 +217,6 @@ body {
 .project {
     margin-bottom: 20px;
     padding: 15px;
-    background-color: var(--light-gray);
     border-radius: 5px;
 }
 
