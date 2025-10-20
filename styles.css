@@ -342,4 +342,18 @@ body {
         color: var(--text-color);
         text-decoration: none;
     }
+
+    /* Show full URLs in PDF */
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+        color: #666;
+    }
+}
+
+/* PDF export mode - show full URLs */
+.pdf-export-mode a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #666;
 }

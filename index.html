@@ -246,8 +246,9 @@
                 const { PDFDocument, rgb } = PDFLib;
                 const pdfDoc = await PDFDocument.create();
 
-                // Hide the export button
+                // Hide the export button and enable PDF export mode (shows full URLs)
                 button.style.display = 'none';
+                container.classList.add('pdf-export-mode');
 
                 // PART 1: Capture main CV (without Education and Projects)
                 if (educationSection) educationSection.style.display = 'none';
@@ -284,9 +285,10 @@
                     height: null
                 });
 
-                // Show everything again
+                // Show everything again and remove PDF export mode
                 allSections.forEach(section => section.style.display = '');
                 if (header) header.style.display = '';
+                container.classList.remove('pdf-export-mode');
                 button.style.display = '';
 
                 // A4 dimensions in points (1 point = 1/72 inch)
