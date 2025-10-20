@@ -6,7 +6,7 @@
     <meta name="description" content="Professional CV of HOAI-ANH PHAM (Andy) - Mobile Engineer">
     <title>HOAI-ANH PHAM (Andy) - CV</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -230,15 +230,15 @@
         document.getElementById('exportPdf').addEventListener('click', async function() {
             const button = this;
             const originalText = button.textContent;
-            
+
             // Show loading state
             button.textContent = '⏳ Generating PDF...';
             button.disabled = true;
-            
+
             try {
                 // Hide the export button temporarily for PDF generation
                 button.style.display = 'none';
-                
+
                 // Use html2canvas to capture the CV content
                 const canvas = await html2canvas(document.querySelector('.container'), {
                     scale: 2,
@@ -248,41 +248,69 @@
                     width: 900,
                     height: null
                 });
-                
+
                 // Show the button again
                 button.style.display = '';
-                
-                // Create PDF using jsPDF
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4'
-                });
-                
-                // Calculate dimensions to fit A4
-                const imgWidth = 210; // A4 width in mm
-                const pageHeight = 297; // A4 height in mm
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                let heightLeft = imgHeight;
-                let position = 0;
-                
-                // Add image to PDF
-                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-                
-                // Add additional pages if content is longer than one page
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
+
+                // Convert canvas to PNG bytes
+                const pngDataUrl = canvas.toDataURL('image/png');
+                const pngBytes = await fetch(pngDataUrl).then(res => res.arrayBuffer());
+
+                // Create a new PDF document using pdf-lib
+                const { PDFDocument } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+
+                // Embed the PNG image
+                const pngImage = await pdfDoc.embedPng(pngBytes);
+
+                // Get image dimensions
+                const pngDims = pngImage.scale(1);
+
+                // A4 dimensions in points (1 point = 1/72 inch)
+                const a4Width = 595.28; // ~210mm
+                const a4Height = 841.89; // ~297mm
+
+                // Calculate scaling to fit A4 width
+                const scale = a4Width / pngDims.width;
+                const scaledWidth = a4Width;
+                const scaledHeight = pngDims.height * scale;
+
+                // Calculate how many pages we need
+                const numPages = Math.ceil(scaledHeight / a4Height);
+
+                // Add pages and draw portions of the image
+                for (let i = 0; i < numPages; i++) {
+                    const page = pdfDoc.addPage([a4Width, a4Height]);
+
+                    const yOffset = i * a4Height;
+                    const remainingHeight = scaledHeight - yOffset;
+                    const drawHeight = Math.min(a4Height, remainingHeight);
+
+                    // Calculate which portion of the source image to draw
+                    const sourceY = (yOffset / scale);
+                    const sourceHeight = (drawHeight / scale);
+
+                    page.drawImage(pngImage, {
+                        x: 0,
+                        y: a4Height - drawHeight,
+                        width: scaledWidth,
+                        height: drawHeight,
+                        opacity: 1,
+                    });
                 }
-                
-                // Download the PDF
-                pdf.save('HOAI-ANH_PHAM_CV.pdf');
-                
+
+                // Serialize the PDF to bytes
+                const pdfBytes = await pdfDoc.save();
+
+                // Create a blob and download
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'HOAI-ANH_PHAM_CV.pdf';
+                link.click();
+                URL.revokeObjectURL(url);
+
             } catch (error) {
                 console.error('Error generating PDF:', error);
                 alert('Error generating PDF. Please try again.');
