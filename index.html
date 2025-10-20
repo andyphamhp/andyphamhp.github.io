@@ -260,12 +260,19 @@
                 const a4Width = 595.28; // ~210mm
                 const a4Height = 841.89; // ~297mm
 
-                // Calculate scaling to fit A4 width
-                const scale = a4Width / canvas.width;
+                // Define padding/margins (in points)
+                const padding = 40; // 40 points = ~14mm on all sides
+
+                // Calculate available space after padding
+                const contentWidth = a4Width - (2 * padding);
+                const contentHeight = a4Height - (2 * padding);
+
+                // Calculate scaling to fit content width (with padding)
+                const scale = contentWidth / canvas.width;
                 const scaledHeight = canvas.height * scale;
 
-                // Calculate how many pages we need
-                const numPages = Math.ceil(scaledHeight / a4Height);
+                // Calculate how many pages we need based on available content height
+                const numPages = Math.ceil(scaledHeight / contentHeight);
 
                 // Split the canvas into separate pages
                 for (let i = 0; i < numPages; i++) {
@@ -274,8 +281,8 @@
                     const pageCtx = pageCanvas.getContext('2d');
 
                     // Calculate source coordinates (which part of the original canvas to copy)
-                    const sourceY = (i * a4Height) / scale;
-                    const sourceHeight = Math.min(a4Height / scale, canvas.height - sourceY);
+                    const sourceY = (i * contentHeight) / scale;
+                    const sourceHeight = Math.min(contentHeight / scale, canvas.height - sourceY);
 
                     // Set page canvas size
                     pageCanvas.width = canvas.width;
@@ -305,11 +312,11 @@
                     // Calculate the height for this page (last page might be shorter)
                     const pageHeight = sourceHeight * scale;
 
-                    // Draw the image on the PDF page
+                    // Draw the image on the PDF page with padding
                     page.drawImage(pageImage, {
-                        x: 0,
-                        y: a4Height - pageHeight,
-                        width: a4Width,
+                        x: padding,
+                        y: a4Height - padding - pageHeight,
+                        width: contentWidth,
                         height: pageHeight,
                     });
                 }
