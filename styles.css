@@ -311,21 +311,21 @@ body {
     body {
         background-color: white;
     }
-    
+
     .container {
         box-shadow: none;
         max-width: 100%;
-        padding: 0;
+        padding: 0 0 60px 0;
     }
-    
+
     .section {
         break-inside: avoid;
     }
-    
+
     .export-btn {
         display: none;
     }
-    
+
     a {
         color: var(--text-color);
         text-decoration: none;
