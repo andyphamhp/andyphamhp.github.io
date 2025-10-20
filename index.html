@@ -253,7 +253,7 @@
                 button.style.display = '';
 
                 // Create a new PDF document using pdf-lib
-                const { PDFDocument } = PDFLib;
+                const { PDFDocument, rgb } = PDFLib;
                 const pdfDoc = await PDFDocument.create();
 
                 // A4 dimensions in points (1 point = 1/72 inch)
@@ -318,6 +318,16 @@
                         y: a4Height - padding - pageHeight,
                         width: contentWidth,
                         height: pageHeight,
+                    });
+
+                    // Draw a border to visualize the padding (optional - can be removed)
+                    page.drawRectangle({
+                        x: padding,
+                        y: padding,
+                        width: contentWidth,
+                        height: contentHeight,
+                        borderColor: rgb(0.9, 0.9, 0.9),
+                        borderWidth: 0.5,
                     });
                 }
 
