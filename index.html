@@ -236,17 +236,24 @@
             button.disabled = true;
 
             try {
-                // Get the position of the projects section before capturing
+                // Get all sections
                 const container = document.querySelector('.container');
+                const allSections = container.querySelectorAll('.section');
+                const educationSection = document.querySelector('.section.education');
                 const projectsSection = document.querySelector('.section.projects');
-                const containerTop = container.offsetTop;
-                const projectsTop = projectsSection ? projectsSection.offsetTop - containerTop : null;
 
-                // Hide the export button temporarily for PDF generation
+                // Create a new PDF document using pdf-lib
+                const { PDFDocument, rgb } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+
+                // Hide the export button
                 button.style.display = 'none';
 
-                // Use html2canvas to capture the CV content
-                const canvas = await html2canvas(container, {
+                // PART 1: Capture main CV (without Education and Projects)
+                if (educationSection) educationSection.style.display = 'none';
+                if (projectsSection) projectsSection.style.display = 'none';
+
+                const mainCanvas = await html2canvas(container, {
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
@@ -255,15 +262,32 @@
                     height: null
                 });
 
-                // Show the button again
+                // PART 2: Capture Education and Projects only
+                // Hide all sections except Education and Projects, and hide header
+                const header = document.querySelector('.header');
+                if (header) header.style.display = 'none';
+
+                allSections.forEach(section => {
+                    if (section !== educationSection && section !== projectsSection) {
+                        section.style.display = 'none';
+                    }
+                });
+                if (educationSection) educationSection.style.display = '';
+                if (projectsSection) projectsSection.style.display = '';
+
+                const extraCanvas = await html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    width: 900,
+                    height: null
+                });
+
+                // Show everything again
+                allSections.forEach(section => section.style.display = '');
+                if (header) header.style.display = '';
                 button.style.display = '';
-
-                // Convert projects section position to canvas coordinates
-                const projectsCanvasY = projectsTop ? projectsTop * 2 : null;
-
-                // Create a new PDF document using pdf-lib
-                const { PDFDocument, rgb } = PDFLib;
-                const pdfDoc = await PDFDocument.create();
 
                 // A4 dimensions in points (1 point = 1/72 inch)
                 const a4Width = 595.28; // ~210mm
@@ -276,80 +300,68 @@
                 const contentWidth = a4Width - (2 * padding);
                 const contentHeight = a4Height - (2 * padding);
 
-                // Calculate scaling to fit content width (with padding)
-                const scale = contentWidth / canvas.width;
-                const scaledHeight = canvas.height * scale;
+                // Helper function to process a canvas and add pages to PDF
+                async function addCanvasPages(canvas) {
+                    // Calculate scaling to fit content width (with padding)
+                    const scale = contentWidth / canvas.width;
+                    const scaledHeight = canvas.height * scale;
 
-                // Calculate page breaks, ensuring projects section starts on new page
-                const pageBreaks = [0];
-                let currentY = 0;
+                    // Calculate how many pages we need based on available content height
+                    const numPages = Math.ceil(scaledHeight / contentHeight);
 
-                while (currentY < canvas.height) {
-                    let nextBreak = currentY + (contentHeight / scale);
+                    // Split the canvas into separate pages
+                    for (let i = 0; i < numPages; i++) {
+                        // Create a new canvas for this page
+                        const pageCanvas = document.createElement('canvas');
+                        const pageCtx = pageCanvas.getContext('2d');
 
-                    // If projects section exists and would be split by this break
-                    if (projectsCanvasY &&
-                        currentY < projectsCanvasY &&
-                        nextBreak > projectsCanvasY &&
-                        nextBreak < projectsCanvasY + 100) { // 100px buffer
-                        // Move break to start of projects section
-                        nextBreak = projectsCanvasY;
+                        // Calculate source coordinates (which part of the original canvas to copy)
+                        const sourceY = (i * contentHeight) / scale;
+                        const sourceHeight = Math.min(contentHeight / scale, canvas.height - sourceY);
+
+                        // Set page canvas size
+                        pageCanvas.width = canvas.width;
+                        pageCanvas.height = sourceHeight;
+
+                        // Fill with white background
+                        pageCtx.fillStyle = '#ffffff';
+                        pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+                        // Copy the portion of the original canvas to this page canvas
+                        pageCtx.drawImage(
+                            canvas,
+                            0, sourceY, canvas.width, sourceHeight,  // source
+                            0, 0, pageCanvas.width, pageCanvas.height // destination
+                        );
+
+                        // Convert this page to PNG
+                        const pageDataUrl = pageCanvas.toDataURL('image/png');
+                        const pageBytes = await fetch(pageDataUrl).then(res => res.arrayBuffer());
+
+                        // Embed the PNG image for this page
+                        const pageImage = await pdfDoc.embedPng(pageBytes);
+
+                        // Add a page to the PDF
+                        const page = pdfDoc.addPage([a4Width, a4Height]);
+
+                        // Calculate the height for this page (last page might be shorter)
+                        const pageHeight = sourceHeight * scale;
+
+                        // Draw the image on the PDF page with padding
+                        page.drawImage(pageImage, {
+                            x: padding,
+                            y: a4Height - padding - pageHeight,
+                            width: contentWidth,
+                            height: pageHeight,
+                        });
                     }
-
-                    if (nextBreak < canvas.height) {
-                        pageBreaks.push(nextBreak);
-                    }
-                    currentY = nextBreak;
                 }
 
-                // Split the canvas into separate pages using calculated breaks
-                for (let i = 0; i < pageBreaks.length; i++) {
-                    // Create a new canvas for this page
-                    const pageCanvas = document.createElement('canvas');
-                    const pageCtx = pageCanvas.getContext('2d');
+                // Process main CV pages
+                await addCanvasPages(mainCanvas);
 
-                    // Calculate source coordinates (which part of the original canvas to copy)
-                    const sourceY = pageBreaks[i];
-                    const sourceHeight = i < pageBreaks.length - 1
-                        ? pageBreaks[i + 1] - sourceY
-                        : canvas.height - sourceY;
-
-                    // Set page canvas size
-                    pageCanvas.width = canvas.width;
-                    pageCanvas.height = sourceHeight;
-
-                    // Fill with white background
-                    pageCtx.fillStyle = '#ffffff';
-                    pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-
-                    // Copy the portion of the original canvas to this page canvas
-                    pageCtx.drawImage(
-                        canvas,
-                        0, sourceY, canvas.width, sourceHeight,  // source
-                        0, 0, pageCanvas.width, pageCanvas.height // destination
-                    );
-
-                    // Convert this page to PNG
-                    const pageDataUrl = pageCanvas.toDataURL('image/png');
-                    const pageBytes = await fetch(pageDataUrl).then(res => res.arrayBuffer());
-
-                    // Embed the PNG image for this page
-                    const pageImage = await pdfDoc.embedPng(pageBytes);
-
-                    // Add a page to the PDF
-                    const page = pdfDoc.addPage([a4Width, a4Height]);
-
-                    // Calculate the height for this page (last page might be shorter)
-                    const pageHeight = sourceHeight * scale;
-
-                    // Draw the image on the PDF page with padding
-                    page.drawImage(pageImage, {
-                        x: padding,
-                        y: a4Height - padding - pageHeight,
-                        width: contentWidth,
-                        height: pageHeight,
-                    });
-                }
+                // Process Education and Projects page
+                await addCanvasPages(extraCanvas);
 
                 // Serialize the PDF to bytes
                 const pdfBytes = await pdfDoc.save();
