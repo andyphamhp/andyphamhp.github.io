@@ -50,21 +50,31 @@ body {
 
 .contact {
     font-size: 0.95em;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
 }
 
 .contact-item {
+    display: flex;
+    gap: 8px;
+}
+
+.contact-label {
+    font-weight: bold;
+    color: var(--primary-color);
+    min-width: 80px;
+}
+
+.contact-item a {
     color: var(--text-color);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.contact-item:hover {
+.contact-item a:hover {
     color: var(--secondary-color);
-}
-
-.separator {
-    margin: 0 10px;
-    color: #ccc;
 }
 
 .export-btn {
@@ -283,15 +293,6 @@ body {
         font-size: 0.85em;
     }
     
-    .separator {
-        display: none;
-    }
-    
-    .contact-item {
-        display: block;
-        margin: 5px 0;
-    }
-    
     .export-btn {
         position: static;
         margin: 15px auto 20px;
@@ -343,17 +344,4 @@ body {
         text-decoration: none;
     }
 
-    /* Show full URLs in PDF */
-    a[href]::after {
-        content: " (" attr(href) ")";
-        font-size: 0.85em;
-        color: #666;
-    }
-}
-
-/* PDF export mode - show full URLs */
-.pdf-export-mode a[href]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.85em;
-    color: #666;
 }

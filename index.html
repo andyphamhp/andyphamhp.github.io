@@ -16,13 +16,22 @@
             <p class="title">MOBILE ENGINEER</p>
             <button id="exportPdf" class="export-btn">📄 Download PDF</button>
             <div class="contact">
-                <a href="mailto:andyphamhp9x@gmail.com" class="contact-item">andyphamhp9x@gmail.com</a>
-                <span class="separator">|</span>
-                <a href="tel:+84898001366" class="contact-item">+84 (898) 001-366</a>
-                <span class="separator">|</span>
-                <a href="https://www.linkedin.com/in/jimmyphamvn/" class="contact-item" target="_blank">LinkedIn</a>
-                <span class="separator">|</span>
-                <a href="https://github.com/andyphamhp" class="contact-item" target="_blank">GitHub</a>
+                <div class="contact-item">
+                    <span class="contact-label">Email:</span>
+                    <a href="mailto:andyphamhp9x@gmail.com">andyphamhp9x@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Tel:</span>
+                    <a href="tel:+84898001366">+84 (898) 001-366</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">LinkedIn:</span>
+                    <a href="https://www.linkedin.com/in/jimmyphamvn/" target="_blank">https://www.linkedin.com/in/jimmyphamvn/</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">GitHub:</span>
+                    <a href="https://github.com/andyphamhp" target="_blank">https://github.com/andyphamhp</a>
+                </div>
             </div>
         </header>
 
@@ -246,9 +255,8 @@
                 const { PDFDocument, rgb } = PDFLib;
                 const pdfDoc = await PDFDocument.create();
 
-                // Hide the export button and enable PDF export mode (shows full URLs)
+                // Hide the export button
                 button.style.display = 'none';
-                container.classList.add('pdf-export-mode');
 
                 // PART 1: Capture main CV (without Education and Projects)
                 if (educationSection) educationSection.style.display = 'none';
@@ -285,10 +293,9 @@
                     height: null
                 });
 
-                // Show everything again and remove PDF export mode
+                // Show everything again
                 allSections.forEach(section => section.style.display = '');
                 if (header) header.style.display = '';
-                container.classList.remove('pdf-export-mode');
                 button.style.display = '';
 
                 // A4 dimensions in points (1 point = 1/72 inch)
