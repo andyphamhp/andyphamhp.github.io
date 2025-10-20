@@ -215,11 +215,18 @@ body {
     line-height: 1.6;
 }
 
+.section.projects {
+    page-break-before: always;
+    break-before: always;
+}
+
 .project {
     margin-bottom: 20px;
     padding: 15px;
     background-color: var(--light-gray);
     border-radius: 5px;
+    page-break-inside: avoid;
+    break-inside: avoid;
 }
 
 .project-title {
@@ -320,6 +327,11 @@ body {
 
     .section {
         break-inside: avoid;
+    }
+
+    .section.projects {
+        page-break-before: always;
+        margin-top: 0;
     }
 
     .export-btn {
