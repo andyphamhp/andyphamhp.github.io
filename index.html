@@ -236,11 +236,17 @@
             button.disabled = true;
 
             try {
+                // Get the position of the projects section before capturing
+                const container = document.querySelector('.container');
+                const projectsSection = document.querySelector('.section.projects');
+                const containerTop = container.offsetTop;
+                const projectsTop = projectsSection ? projectsSection.offsetTop - containerTop : null;
+
                 // Hide the export button temporarily for PDF generation
                 button.style.display = 'none';
 
                 // Use html2canvas to capture the CV content
-                const canvas = await html2canvas(document.querySelector('.container'), {
+                const canvas = await html2canvas(container, {
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
@@ -251,6 +257,9 @@
 
                 // Show the button again
                 button.style.display = '';
+
+                // Convert projects section position to canvas coordinates
+                const projectsCanvasY = projectsTop ? projectsTop * 2 : null;
 
                 // Create a new PDF document using pdf-lib
                 const { PDFDocument, rgb } = PDFLib;
@@ -271,18 +280,39 @@
                 const scale = contentWidth / canvas.width;
                 const scaledHeight = canvas.height * scale;
 
-                // Calculate how many pages we need based on available content height
-                const numPages = Math.ceil(scaledHeight / contentHeight);
+                // Calculate page breaks, ensuring projects section starts on new page
+                const pageBreaks = [0];
+                let currentY = 0;
 
-                // Split the canvas into separate pages
-                for (let i = 0; i < numPages; i++) {
+                while (currentY < canvas.height) {
+                    let nextBreak = currentY + (contentHeight / scale);
+
+                    // If projects section exists and would be split by this break
+                    if (projectsCanvasY &&
+                        currentY < projectsCanvasY &&
+                        nextBreak > projectsCanvasY &&
+                        nextBreak < projectsCanvasY + 100) { // 100px buffer
+                        // Move break to start of projects section
+                        nextBreak = projectsCanvasY;
+                    }
+
+                    if (nextBreak < canvas.height) {
+                        pageBreaks.push(nextBreak);
+                    }
+                    currentY = nextBreak;
+                }
+
+                // Split the canvas into separate pages using calculated breaks
+                for (let i = 0; i < pageBreaks.length; i++) {
                     // Create a new canvas for this page
                     const pageCanvas = document.createElement('canvas');
                     const pageCtx = pageCanvas.getContext('2d');
 
                     // Calculate source coordinates (which part of the original canvas to copy)
-                    const sourceY = (i * contentHeight) / scale;
-                    const sourceHeight = Math.min(contentHeight / scale, canvas.height - sourceY);
+                    const sourceY = pageBreaks[i];
+                    const sourceHeight = i < pageBreaks.length - 1
+                        ? pageBreaks[i + 1] - sourceY
+                        : canvas.height - sourceY;
 
                     // Set page canvas size
                     pageCanvas.width = canvas.width;
