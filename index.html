@@ -252,50 +252,65 @@
                 // Show the button again
                 button.style.display = '';
 
-                // Convert canvas to PNG bytes
-                const pngDataUrl = canvas.toDataURL('image/png');
-                const pngBytes = await fetch(pngDataUrl).then(res => res.arrayBuffer());
-
                 // Create a new PDF document using pdf-lib
                 const { PDFDocument } = PDFLib;
                 const pdfDoc = await PDFDocument.create();
-
-                // Embed the PNG image
-                const pngImage = await pdfDoc.embedPng(pngBytes);
-
-                // Get image dimensions
-                const pngDims = pngImage.scale(1);
 
                 // A4 dimensions in points (1 point = 1/72 inch)
                 const a4Width = 595.28; // ~210mm
                 const a4Height = 841.89; // ~297mm
 
                 // Calculate scaling to fit A4 width
-                const scale = a4Width / pngDims.width;
-                const scaledWidth = a4Width;
-                const scaledHeight = pngDims.height * scale;
+                const scale = a4Width / canvas.width;
+                const scaledHeight = canvas.height * scale;
 
                 // Calculate how many pages we need
                 const numPages = Math.ceil(scaledHeight / a4Height);
 
-                // Add pages and draw portions of the image
+                // Split the canvas into separate pages
                 for (let i = 0; i < numPages; i++) {
+                    // Create a new canvas for this page
+                    const pageCanvas = document.createElement('canvas');
+                    const pageCtx = pageCanvas.getContext('2d');
+
+                    // Calculate source coordinates (which part of the original canvas to copy)
+                    const sourceY = (i * a4Height) / scale;
+                    const sourceHeight = Math.min(a4Height / scale, canvas.height - sourceY);
+
+                    // Set page canvas size
+                    pageCanvas.width = canvas.width;
+                    pageCanvas.height = sourceHeight;
+
+                    // Fill with white background
+                    pageCtx.fillStyle = '#ffffff';
+                    pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+                    // Copy the portion of the original canvas to this page canvas
+                    pageCtx.drawImage(
+                        canvas,
+                        0, sourceY, canvas.width, sourceHeight,  // source
+                        0, 0, pageCanvas.width, pageCanvas.height // destination
+                    );
+
+                    // Convert this page to PNG
+                    const pageDataUrl = pageCanvas.toDataURL('image/png');
+                    const pageBytes = await fetch(pageDataUrl).then(res => res.arrayBuffer());
+
+                    // Embed the PNG image for this page
+                    const pageImage = await pdfDoc.embedPng(pageBytes);
+
+                    // Add a page to the PDF
                     const page = pdfDoc.addPage([a4Width, a4Height]);
 
-                    const yOffset = i * a4Height;
-                    const remainingHeight = scaledHeight - yOffset;
-                    const drawHeight = Math.min(a4Height, remainingHeight);
+                    // Calculate the height for this page (last page might be shorter)
+                    const pageHeight = sourceHeight * scale;
 
-                    // Calculate which portion of the source image to draw
-                    const sourceY = (yOffset / scale);
-                    const sourceHeight = (drawHeight / scale);
-
-                    page.drawImage(pngImage, {
+                    // Draw the image on the PDF page
+                    page.drawImage(pageImage, {
                         x: 0,
-                        y: a4Height - drawHeight,
-                        width: scaledWidth,
-                        height: drawHeight,
-                        opacity: 1,
+                        y: a4Height - pageHeight,
+                        width: a4Width,
+                        height: pageHeight,
                     });
                 }
 
