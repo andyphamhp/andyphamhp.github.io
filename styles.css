@@ -315,6 +315,11 @@ body {
     }
 }
 
+@page {
+    size: A4;
+    margin: 14mm;
+}
+
 @media print {
     body {
         background-color: white;
@@ -323,15 +328,17 @@ body {
     .container {
         box-shadow: none;
         max-width: 100%;
-        padding: 0 0 60px 0;
+        padding: 0;
     }
 
-    .section {
+    .job,
+    .education-item {
         break-inside: avoid;
     }
 
     .section.projects {
         page-break-before: always;
+        break-before: page;
         margin-top: 0;
     }
 
@@ -343,5 +350,4 @@ body {
         color: var(--text-color);
         text-decoration: none;
     }
-
 }
