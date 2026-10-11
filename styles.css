@@ -225,11 +225,6 @@ body {
     line-height: 1.6;
 }
 
-.section.projects {
-    page-break-before: always;
-    break-before: always;
-}
-
 .project {
     margin-bottom: 20px;
     padding: 15px;
@@ -336,11 +331,35 @@ body {
         break-inside: avoid;
     }
 
-    .section.projects {
-        page-break-before: always;
-        break-before: page;
-        margin-top: 0;
-    }
+    body { font-size: 10pt; line-height: 1.4; }
+    .header { padding-bottom: 10px; margin-bottom: 12px; }
+    .name { font-size: 22pt; margin-bottom: 2px; }
+    .title { font-size: 12pt; margin-bottom: 6px; }
+    .contact { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 2px 14px; font-size: 9pt; }
+    .section { margin-bottom: 12px; }
+    .section-title { font-size: 13pt; margin-bottom: 6px; padding-bottom: 3px; }
+    .summary-text { font-size: 10pt; }
+    .skills-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .skill-category { padding: 6px 8px; }
+    .skill-category-title { font-size: 10pt; margin-bottom: 2px; }
+    .job { margin-bottom: 8px; padding-bottom: 8px; }
+    .job-title { font-size: 11pt; }
+    .job-date, .education-date { font-size: 9pt; }
+    .job-company { font-size: 10pt; margin-bottom: 3px; }
+    .job-details li { margin-bottom: 2px; }
+    .project { margin-bottom: 8px; padding: 8px 10px; break-inside: avoid; }
+    .project-title { font-size: 10.5pt; margin-bottom: 4px; }
+    .project-description { margin-bottom: 4px; }
+    .project-link { font-size: 9pt; }
+    .degree { font-size: 10.5pt; }
+    .summary-text, .skill-list, .project-description, .job-details li { line-height: 1.4; }
+    .job-header, .education-header { flex-direction: row; align-items: baseline; }
+    .job-date, .education-date { margin-top: 0; }
+    .contact-item { gap: 4px; }
+    .contact-label { min-width: 0; }
+    .job { break-inside: auto; }
+    .job-details li { break-inside: avoid; }
+    .institution { font-size: 10pt; margin-bottom: 0; }
 
     .export-btn {
         display: none;
